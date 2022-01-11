@@ -7,20 +7,23 @@ export const useContacts = () => {
     const [isError, setIsError] = useState(false);
 
     useEffect(() => {
+        let isMounted=true;
         const getContacts = async () => {
             try {
-                const response = await fetch('https://randomuser.me/api/?results=200');
+                const response = await fetch('https://randomuser.me/api/?results=10');
                 const result = await response.json();
                if (!response.ok) throw new Error(response.statusText);
-                console.log(result.results)
-                setData(result.results);
+                if(isMounted) setData(result.results);
             } catch (e) {
-                setIsError(true);
+                if(isMounted) setIsError(true);
             } finally {
-                setIsLoading(false);
+                if(isMounted) setIsLoading(false);
             }
         }
         getContacts();
+        return ()=>{
+            isMounted=false;
+        }
     }, []);
 
     return {data, isLoading, isError};
