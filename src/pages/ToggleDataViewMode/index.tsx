@@ -41,10 +41,16 @@ const ToggleDataViewMode:React.FC<IProps>=({dataViewMode, setDataViewMode})=> {
             exclusive
             onChange={handleChangeViewMode}
         >
-            <ToggleButton value={DATA_VIEW_MODE.TABLE} aria-label={DATA_VIEW_MODE.TABLE}>
+            <ToggleButton value={DATA_VIEW_MODE.TABLE}
+                          aria-label={DATA_VIEW_MODE.TABLE}
+            data-testid='toggle-data-viewmode-table'
+            >
                 <ViewListIcon/>
             </ToggleButton>
-            <ToggleButton value={DATA_VIEW_MODE.GRID} aria-label={DATA_VIEW_MODE.GRID}>
+            <ToggleButton value={DATA_VIEW_MODE.GRID}
+                          aria-label={DATA_VIEW_MODE.GRID}
+                          data-testid='toggle-data-viewmode-grid'
+            >
                 <ViewModuleIcon/>
             </ToggleButton>
         </StyledToggleButtonGroup>

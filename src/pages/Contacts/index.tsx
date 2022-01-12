@@ -45,7 +45,7 @@ const Contacts: React.FC = () => {
                         <ContactsTable data={data}/>
                     }
                     {dataViewMode === DATA_VIEW_MODE.GRID &&
-                        <div>GRID</div>
+                        <div data-testid={'contacts-grid-container'}>GRID</div>
                     }
 
                 </Grid>
