@@ -15,6 +15,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import {ContactsFilters} from "./ContactsFilters";
 
 const ContactsContainer = styled(Container)(({theme}) => ({
     marginTop: theme.spacing(4),
@@ -26,7 +27,8 @@ const HeadGrid = styled(Grid)(({theme}) => ({
 
 const filtersDefaultValues = {
     fullname: '',
-    gender:'all'
+    gender:'all',
+    nationality:'all'
 }
 const Contacts: React.FC = () => {
 
@@ -43,15 +45,23 @@ const Contacts: React.FC = () => {
         if(filterGender==='all') return true;
         return gender===filterGender;
     }
-    const handleChangeFilter = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | SelectChangeEvent) => {
+    const filterByNationality = (nationality:string, filterNationality:string)=>{
+        if(filterNationality==='all') return true;
+        return nationality===filterNationality;
+    }
+    const updateFilter = (name:string, value:string) => {
         setFilters(prevFilters => ({
             ...prevFilters,
-            [e.target.name]: e.target.value
+            [name]: value
         }))
     }
-
-    const filteredContacts = data.filter(c => filterByFullName(c.name, filters.fullname))
-        .filter(g=>filterByGender(g.gender, filters.gender));
+   const clearFilters = ()=>{
+        setFilters(filtersDefaultValues)
+   }
+    const filteredContacts = data
+        .filter(c => filterByFullName(c.name, filters.fullname))
+        .filter(g=>filterByGender(g.gender, filters.gender))
+       .filter(n=>filterByNationality(n.nat,filters.nationality));
 
     if (isLoading) return <CircularProgress data-testid={'contacts-loader'}/>;
     if (isError) return <div data-testid={'contacts-error'}>Error...</div>;
@@ -67,33 +77,7 @@ const Contacts: React.FC = () => {
                     </Box>
                 </HeadGrid>
                 <Grid item xs={12}>
-                    <Box component='form' display='flex' gap={2} marginBottom={2}
-                         noValidate
-                         autoComplete="off">
-                        <TextField name='fullname'
-                                   label="Full Name"
-                                   variant="outlined"
-                                   size='small'
-                                   value={filters.fullname}
-                                   onChange={(e) => handleChangeFilter(e)}
-                        />
-
-                        <FormControl  size={'small'} sx={{minWidth:'150px'}}>
-                            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-                            <Select name='gender'
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={filters.gender}
-                                label="Gender"
-                                onChange={handleChangeFilter}
-                            >
-                                <MenuItem value={'all'}>All</MenuItem>
-                                <MenuItem value={'male'}>Male</MenuItem>
-                                <MenuItem value={'female'}>Female</MenuItem>
-                            </Select>
-                        </FormControl>
-
-                    </Box>
+                   <ContactsFilters filters={filters} updateFilter={updateFilter} clearFilters={clearFilters}/>
                 </Grid>
 
                 <Grid item xs={12}>
