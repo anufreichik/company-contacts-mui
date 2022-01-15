@@ -11,6 +11,7 @@ import ToggleDataViewMode from "../ToggleDataViewMode";
 import {DATA_VIEW_MODE} from "../../constants";
 import {useDataViewMode} from "../../hooks/useDataViewMode";
 import {ContactsFilters} from "./ContactsFilters";
+import ContactsGrid from "../ContactsGrid";
 
 const ContactsContainer = styled(Container)(({theme}) => ({
     marginTop: theme.spacing(4),
@@ -82,7 +83,8 @@ const Contacts: React.FC = () => {
                         <ContactsTable data={filteredContacts}/>
                     }
                     {dataViewMode === DATA_VIEW_MODE.GRID &&
-                        <div data-testid={'contacts-grid-container'}>GRID</div>
+                        // <div data-testid={'contacts-grid-container'}>GRID</div>
+                        <ContactsGrid data={filteredContacts}/>
                     }
 
                 </Grid>
