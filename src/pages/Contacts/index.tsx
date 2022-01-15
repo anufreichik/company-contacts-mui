@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {useCallback, useState} from "react";
 import {useContacts} from "../../hooks/useContacts";
 import {styled} from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
@@ -8,13 +8,8 @@ import {ContactsTable} from "../ContactsTable";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from "@mui/material/Box";
 import ToggleDataViewMode from "../ToggleDataViewMode";
-import TextField from '@mui/material/TextField';
 import {DATA_VIEW_MODE} from "../../constants";
 import {useDataViewMode} from "../../hooks/useDataViewMode";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {ContactsFilters} from "./ContactsFilters";
 
 const ContactsContainer = styled(Container)(({theme}) => ({
@@ -27,8 +22,8 @@ const HeadGrid = styled(Grid)(({theme}) => ({
 
 const filtersDefaultValues = {
     fullname: '',
-    gender:'all',
-    nationality:'all'
+    gender: 'all',
+    nationality: 'all'
 }
 const Contacts: React.FC = () => {
 
@@ -37,31 +32,33 @@ const Contacts: React.FC = () => {
 
     const [filters, setFilters] = useState(filtersDefaultValues);
 
-    const filterByFullName = ({first, last}:{first:string, last:string}, fullname:string)=>
+    const filterByFullName = ({first, last}: { first: string, last: string }, fullname: string) =>
         first?.toLowerCase().includes(fullname.toLowerCase()) ||
         last?.toLowerCase().includes(fullname.toLowerCase())
 
-    const filterByGender = (gender:string, filterGender:string)=>{
-        if(filterGender==='all') return true;
-        return gender===filterGender;
+    const filterByGender = (gender: string, filterGender: string) => {
+        if (filterGender === 'all') return true;
+        return gender === filterGender;
     }
-    const filterByNationality = (nationality:string, filterNationality:string)=>{
-        if(filterNationality==='all') return true;
-        return nationality===filterNationality;
+    const filterByNationality = (nationality: string, filterNationality: string) => {
+        if (filterNationality === 'all') return true;
+        return nationality === filterNationality;
     }
-    const updateFilter = (name:string, value:string) => {
+    const updateFilter = useCallback((name: string, value: string) => {
         setFilters(prevFilters => ({
             ...prevFilters,
             [name]: value
         }))
-    }
-   const clearFilters = ()=>{
+    }, []);
+
+    const clearFilters = useCallback(() => {
         setFilters(filtersDefaultValues)
-   }
+    }, []);
+
     const filteredContacts = data
         .filter(c => filterByFullName(c.name, filters.fullname))
-        .filter(g=>filterByGender(g.gender, filters.gender))
-       .filter(n=>filterByNationality(n.nat,filters.nationality));
+        .filter(g => filterByGender(g.gender, filters.gender))
+        .filter(n => filterByNationality(n.nat, filters.nationality));
 
     if (isLoading) return <CircularProgress data-testid={'contacts-loader'}/>;
     if (isError) return <div data-testid={'contacts-error'}>Error...</div>;
@@ -77,7 +74,7 @@ const Contacts: React.FC = () => {
                     </Box>
                 </HeadGrid>
                 <Grid item xs={12}>
-                   <ContactsFilters filters={filters} updateFilter={updateFilter} clearFilters={clearFilters}/>
+                    <ContactsFilters filters={filters} updateFilter={updateFilter} clearFilters={clearFilters}/>
                 </Grid>
 
                 <Grid item xs={12}>

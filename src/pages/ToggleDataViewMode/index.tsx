@@ -27,7 +27,8 @@ interface IProps{
     dataViewMode:string;
     setDataViewMode :   React.Dispatch<React.SetStateAction<string>>;
 }
-const ToggleDataViewMode:React.FC<IProps>=({dataViewMode, setDataViewMode})=> {
+const ToggleDataViewMode:React.FC<IProps>=React.memo(
+    ({dataViewMode, setDataViewMode})=> {
     const handleChangeViewMode =useCallback( (event: React.MouseEvent<HTMLElement>, nextView: string) => {
         setDataViewMode(nextView);
     },[setDataViewMode]);
@@ -55,6 +56,6 @@ const ToggleDataViewMode:React.FC<IProps>=({dataViewMode, setDataViewMode})=> {
             </ToggleButton>
         </StyledToggleButtonGroup>
     );
-}
+});
 
 export default ToggleDataViewMode;
