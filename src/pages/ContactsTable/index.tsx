@@ -14,22 +14,28 @@ import { Typography } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import { CopyToClipboard } from "../../components/CopyToClipboard";
 import { NATIONALITIES_HUMAN_NAME } from "../../constants/nationalities";
+import ContactsSort from "../Contacts/ContactsSort";
 interface IProps {
   data: IUser[];
+  updateSort: (fieldName:string) => void;
 }
-export const ContactsTable: React.FC<IProps> = ({ data }) => {
+export const ContactsTable: React.FC<IProps> = ({ data, updateSort }) => {
   return (
     <TableContainer component={Paper} data-testid={'contacts-table-container'}>
-      <Table sx={{ minWidth: 650 }} aria-label="contacts table">
+      <Table sx={{ minWidth: 700 }} aria-label="contacts table">
         <TableHead>
           <TableRow>
             <TableCell>Avatar</TableCell>
-            <TableCell>Full Name</TableCell>
+            <TableCell>Full Name
+            <ContactsSort sortField={'fullname'} updateSort={updateSort}/>
+            </TableCell>
             <TableCell>Birthday</TableCell>
             <TableCell>Email</TableCell>
             <TableCell>Phone</TableCell>
             <TableCell>Location</TableCell>
-            <TableCell align="right">Nationality</TableCell>
+            <TableCell align="right" width={120}>Nationality
+              <ContactsSort sortField={'nat'} updateSort={updateSort}/>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -73,6 +79,7 @@ export const ContactsTable: React.FC<IProps> = ({ data }) => {
                   label={NATIONALITIES_HUMAN_NAME[row.nat]}
                   color='primary'
                   size="small"
+                  variant={'outlined'}
                   sx={{
                     borderRadius: 0,
                   }}
