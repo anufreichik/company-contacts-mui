@@ -28,7 +28,7 @@ const ContactsGrid: React.FC<IProps> = ({data, updateSort}) => {
                     <ContactsSort sortField={'nat'} updateSort={updateSort}/>
                 </div>
             </Box>
-            <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2}>
+            <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2} data-testid={'contacts-grid-container'}>
                 {data.map(row =>
                     <Box gridColumn="span 1">
 

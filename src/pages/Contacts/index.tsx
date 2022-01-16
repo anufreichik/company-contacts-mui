@@ -14,6 +14,7 @@ import {ContactsFilters} from "./ContactsFilters";
 import ContactsGrid from "../ContactsGrid";
 import {IUser} from "../../types/types";
 import AppPagination from "../Pagination";
+import Statistics from "../Statistics";
 
 const ITEMS_PER_PAGE = 2;
 
@@ -109,6 +110,7 @@ const Contacts: React.FC = () => {
     if (isError) return <div data-testid={'contacts-error'}>Error...</div>;
 
     return (
+        <>
         <ContactsContainer maxWidth="lg">
             <Grid container>
                 <HeadGrid item xs={12}>
@@ -127,20 +129,26 @@ const Contacts: React.FC = () => {
                         <ContactsTable data={pagedContacts} updateSort={updateSort}/>
                     }
                     {dataViewMode === DATA_VIEW_MODE.GRID &&
-                        // <div data-testid={'contacts-grid-container'}>GRID</div>
                         <ContactsGrid data={pagedContacts} updateSort={updateSort}/>
                     }
 
                 </Grid>
-                <Grid item xs={12}>
-                    <Box display='flex' justifyContent='end' marginTop={2}>
-                        <AppPagination currentPage={page} pageCount={Number(filteredContacts.length / ITEMS_PER_PAGE)}
-                                       updatePage={updatePage}/>
-                    </Box>
-                </Grid>
+                {
+                    filteredContacts.length>ITEMS_PER_PAGE &&
+                    <Grid item xs={12}>
+                        <Box display='flex' justifyContent='end' marginTop={2}>
+                            <AppPagination currentPage={page} pageCount={Math.floor(filteredContacts.length / ITEMS_PER_PAGE)}
+                                           updatePage={updatePage}/>
+                        </Box>
+                    </Grid>
+                }
+
             </Grid>
 
-        </ContactsContainer>);
+        </ContactsContainer>
+    <Statistics data={data}/>
+    </>
+    );
 };
 
 export default Contacts;
